@@ -1,5 +1,7 @@
 # 💃🕺 TheGarbaThrills
 
+![TheGarbaThrills banner](./screenshots/banner.svg)
+
 **A Garba-night matchmaking app, built for VIT Bhopal's Navratri season.**
 
 Swipe, match, and chat with fellow students before you hit the dance floor. Built solo, ground-up, with zero budget — powered entirely by free-tier infrastructure.
