@@ -33,13 +33,17 @@ Every service in this stack runs on a free tier with no credit card required —
 
 ## 📸 Screenshots
 
-<!-- Add screenshots below. Example format:
-| Swipe Deck | Chat | Matches |
+| Welcome | Sign In | Browse Profiles |
 |---|---|---|
-| ![Swipe](./screenshots/swipe.png) | ![Chat](./screenshots/chat.png) | ![Matches](./screenshots/matches.png) |
--->
+| ![Welcome](./screenshots/Welcome.png) | ![Sign In](./screenshots/SignIn.png) | ![Browse Profiles](./screenshots/BrowseProfiles.png) |
 
-_Screenshots coming soon._
+| Likes You | Matches | Chat |
+|---|---|---|
+| ![Likes You](./screenshots/LikesYou.png) | ![Matches](./screenshots/Matches.png) | ![Chat](./screenshots/Chat.png) |
+
+| Profile |
+|---|
+| ![Profile](./screenshots/Profile.png) |
 
 ## 📁 Project Structure
 
