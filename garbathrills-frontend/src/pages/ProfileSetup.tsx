@@ -38,13 +38,18 @@ const ProfileSetup = () => {
     fetchTags();
   }, []);
 
-  const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
 
     const ageNum = parseInt(age, 10);
     if (!ageNum || ageNum < 18) {
       setError('You must be at least 18 to use TheGarbaThrills');
+      return;
+    }
+
+    if (!bio.trim()) {
+      setError('Please write a short bio');
       return;
     }
 

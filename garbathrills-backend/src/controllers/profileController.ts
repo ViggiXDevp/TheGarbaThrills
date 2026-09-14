@@ -9,11 +9,10 @@ import { INTEREST_TAGS } from '../constants/interests';
 
 const updateProfileSchema = z.object({
   age: z.number().int().min(18).max(100),
-  bio: z.string().max(150).optional().default(''),
-  interests: z.array(z.enum(INTEREST_TAGS)).max(8),
+  bio: z.string().trim().min(1).max(150),
+  interests: z.array(z.enum(INTEREST_TAGS)).min(1).max(8),
   lookingFor: z.enum(['male', 'female', 'other', 'anyone']),
 });
-
 // ---------- Controllers ----------
 
 export const getInterestTags = (_req: AuthRequest, res: Response): void => {
@@ -32,6 +31,11 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
   const user = await User.findById(req.userId);
   if (!user) {
     res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  if (user.photos.length === 0) {
+    res.status(400).json({ message: 'Please upload at least 1 photo before saving your profile' });
     return;
   }
 
