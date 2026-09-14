@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
-import { UserCircle2, Heart, MessageCircle, Sparkles, Users } from 'lucide-react';
+import { UserCircle2, Heart, MessageCircle, Sparkles, Users, Star } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import FestiveBackgroundArt from '../components/FestiveBackgroundArt';
+
+const FEEDBACK_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLScXaP6q0_gcj0K5UFWlH15kanWIpg1vIZmTEm24yOOC_BBJZw/viewform?usp=dialog';
 
 const Home = () => {
   const { user, logout } = useAuth();
@@ -56,6 +59,21 @@ const Home = () => {
               <span className="home-menu-desc">People you've matched with</span>
             </span>
           </Link>
+
+          <a
+            href={FEEDBACK_FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="home-menu-item"
+          >
+            <span className="home-menu-icon">
+              <Star size={22} />
+            </span>
+            <span className="home-menu-text">
+              <span className="home-menu-title">Feedback</span>
+              <span className="home-menu-desc">Tell us about your experience</span>
+            </span>
+          </a>
         </div>
 
         <button onClick={logout}>Log out</button>
