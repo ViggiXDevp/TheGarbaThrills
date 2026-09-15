@@ -85,30 +85,34 @@ const SwipeDeck = () => {
     }
   };
 
-  const commitSwipe = async (direction: 'like' | 'pass') => {
-    if (!currentProfile) return;
+  const commitSwipe = (direction: 'like' | 'pass') => {
+  if (!currentProfile) return;
 
-    setExitDirection(direction === 'like' ? 'right' : 'left');
+  const swipedProfile = currentProfile;
+  setExitDirection(direction === 'like' ? 'right' : 'left');
 
-    try {
-      const res = await api.post('/swipe', { toUserId: currentProfile._id, direction });
+  // Fire the swipe request in the background — don't block the UI on it
+  api
+    .post('/swipe', { toUserId: swipedProfile._id, direction })
+    .then((res) => {
       if (res.data.matched) {
         setMatchedUser({
           name: res.data.matchedUser.name,
           photos: res.data.matchedUser.photos || [],
         });
       }
-    } catch {
-      // Swipe failed silently; move on regardless so the deck doesn't get stuck
-    }
+    })
+    .catch(() => {
+      // Swipe failed silently; the deck has already moved on
+    });
 
-    setTimeout(() => {
-      setIndex((i) => i + 1);
-      setPhotoIndex(0);
-      setDragX(0);
-      setExitDirection(null);
-    }, 320);
-  };
+  setTimeout(() => {
+    setIndex((i) => i + 1);
+    setPhotoIndex(0);
+    setDragX(0);
+    setExitDirection(null);
+  }, 320);
+};
 
   const cyclePhoto = (dir: 'prev' | 'next') => {
     if (!currentProfile) return;

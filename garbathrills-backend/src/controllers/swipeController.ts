@@ -50,6 +50,39 @@ export const getDeck = async (req: AuthRequest, res: Response): Promise<void> =>
   res.status(200).json({ profiles: candidates });
 };
 
+// GET /api/swipe/search?q=name — search by name across ALL genders, bypassing preference matching
+export const searchProfiles = async (req: AuthRequest, res: Response): Promise<void> => {
+  const query = (req.query.q as string | undefined)?.trim();
+
+  if (!query) {
+    res.status(200).json({ profiles: [] });
+    return;
+  }
+
+  const me = await User.findById(req.userId);
+  if (!me) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  const alreadySwiped = await Swipe.find({ fromUser: me._id }).select('toUser').lean();
+  const excludedIds: (string | Types.ObjectId)[] = alreadySwiped.map((s) => s.toUser);
+
+  const blockedIds = await getExcludedUserIds(req.userId as string);
+  excludedIds.push(...blockedIds);
+
+  const candidates = await User.find({
+    _id: { $ne: me._id, $nin: excludedIds },
+    profileComplete: true,
+    name: { $regex: query, $options: 'i' },
+  })
+    .select(publicProfileFields)
+    .limit(20)
+    .lean();
+
+  res.status(200).json({ profiles: candidates });
+};
+
 // POST /api/swipe — record a like/pass, detect mutual match
 export const recordSwipe = async (req: AuthRequest, res: Response): Promise<void> => {
   const parsed = swipeSchema.safeParse(req.body);
