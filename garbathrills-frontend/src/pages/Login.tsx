@@ -40,6 +40,24 @@ const Login = () => {
       <form className="auth-card" onSubmit={handleSubmit}>
         <h1>Welcome back</h1>
         <p className="subtitle">Log in to continue</p>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 8,
+            background: 'var(--color-blush)',
+            border: '1px solid var(--color-gold-light)',
+            borderRadius: 10,
+            padding: '10px 12px',
+            marginTop: -8,
+            marginBottom: 18,
+          }}
+        >
+          <span style={{ fontSize: 14, lineHeight: 1 }}>⚠️</span>
+          <p style={{ fontSize: 11.5, color: 'var(--color-maroon)', lineHeight: 1.4, margin: 0 }}>
+            <strong>Disclaimer:</strong> This is an unofficial student project, made for this event only. Not affiliated with the college administration or any cultural/regional club.
+          </p>
+        </div>
 
         {error && <div className="error-banner">{error}</div>}
 
