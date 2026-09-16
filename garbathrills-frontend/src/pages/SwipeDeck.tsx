@@ -402,12 +402,14 @@ const SwipeDeck = () => {
                           type="button"
                           className="swipe-photo-tap swipe-photo-tap-left"
                           onClick={() => cyclePhoto('prev')}
+                          onPointerDown={(e) => e.stopPropagation()}
                           aria-label="Previous photo"
                         />
                         <button
                           type="button"
                           className="swipe-photo-tap swipe-photo-tap-right"
                           onClick={() => cyclePhoto('next')}
+                          onPointerDown={(e) => e.stopPropagation()}
                           aria-label="Next photo"
                         />
                       </>
