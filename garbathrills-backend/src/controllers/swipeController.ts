@@ -27,13 +27,17 @@ export const getDeck = async (req: AuthRequest, res: Response): Promise<void> =>
     return;
   }
 
-  // Users I've already swiped on (like or pass) should not reappear
-  const alreadySwiped = await Swipe.find({ fromUser: me._id }).select('toUser').lean();
-  const excludedIds: (string | Types.ObjectId)[] = alreadySwiped.map((s) => s.toUser);
+  // Exclude blocked users (either direction)
+  const excludedIds: (string | Types.ObjectId)[] = await getExcludedUserIds(req.userId as string);
 
-  // Also exclude anyone involved in a block in either direction
-  const blockedIds = await getExcludedUserIds(req.userId as string);
-  excludedIds.push(...blockedIds);
+  // Exclude anyone already matched — they belong in Matches, not the deck
+  const myMatches = await Match.find({ $or: [{ userA: me._id }, { userB: me._id }] })
+    .select('userA userB')
+    .lean();
+  myMatches.forEach((m) => {
+    const partnerId = m.userA.toString() === (req.userId as string) ? m.userB : m.userA;
+    excludedIds.push(partnerId);
+  });
 
   const genderFilter = me.lookingFor === 'anyone' ? {} : { gender: me.lookingFor };
 
@@ -65,11 +69,15 @@ export const searchProfiles = async (req: AuthRequest, res: Response): Promise<v
     return;
   }
 
-  const alreadySwiped = await Swipe.find({ fromUser: me._id }).select('toUser').lean();
-  const excludedIds: (string | Types.ObjectId)[] = alreadySwiped.map((s) => s.toUser);
+  const excludedIds: (string | Types.ObjectId)[] = await getExcludedUserIds(req.userId as string);
 
-  const blockedIds = await getExcludedUserIds(req.userId as string);
-  excludedIds.push(...blockedIds);
+  const myMatches = await Match.find({ $or: [{ userA: me._id }, { userB: me._id }] })
+    .select('userA userB')
+    .lean();
+  myMatches.forEach((m) => {
+    const partnerId = m.userA.toString() === (req.userId as string) ? m.userB : m.userA;
+    excludedIds.push(partnerId);
+  });
 
   const candidates = await User.find({
     _id: { $ne: me._id, $nin: excludedIds },
@@ -109,15 +117,12 @@ export const recordSwipe = async (req: AuthRequest, res: Response): Promise<void
     return;
   }
 
-  try {
-    await Swipe.create({ fromUser: req.userId, toUser: toUserId, direction });
-  } catch (error: any) {
-    if (error?.code === 11000) {
-      res.status(409).json({ message: 'You already swiped on this profile' });
-      return;
-    }
-    throw error;
-  }
+  // Upsert: create the swipe record, or update the direction if it already exists
+  await Swipe.findOneAndUpdate(
+    { fromUser: req.userId, toUser: toUserId },
+    { direction },
+    { upsert: true, new: true },
+  );
 
   if (direction === 'pass') {
     res.status(200).json({ matched: false });
