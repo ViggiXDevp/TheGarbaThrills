@@ -261,13 +261,24 @@ const SwipeDeck = () => {
           <h2 className="swipe-page-title">Browse Profiles</h2>
         </div>
 
-        <div className="chat-gif-search" style={{ marginBottom: 16, width: '100%' }}>
-          <Search size={16} />
+        <div className="password-input-wrap" style={{ marginBottom: 16, width: '100%' }}>
+          <Search
+            size={16}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 14,
+              transform: 'translateY(-50%)',
+              color: 'var(--color-muted)',
+            }}
+          />
           <input
             type="text"
             placeholder="Search by name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="chat-search-input"
+            style={{ paddingLeft: 38 }}
           />
         </div>
 
