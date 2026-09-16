@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, X, Heart, RotateCcw, ShieldAlert, Search } from 'lucide-react';
 import { api } from '../lib/api';
 import FestiveBackgroundArt from '../components/FestiveBackgroundArt';
@@ -38,7 +38,18 @@ const SwipeDeck = () => {
   const [reportReason, setReportReason] = useState('');
 
   // ---------- Search state ----------
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQueryState] = useState(searchParams.get('q') || '');
+
+  const setSearchQuery = (value: string) => {
+    setSearchQueryState(value);
+    if (value) {
+      setSearchParams({ q: value }, { replace: true });
+    } else {
+      setSearchParams({}, { replace: true });
+    }
+  };
+  
   const [searchResults, setSearchResults] = useState<CandidateProfile[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchedIds, setSearchedIds] = useState<Set<string>>(new Set());
