@@ -29,7 +29,7 @@ Swipe, match, and chat with fellow students before you hit the dance floor. Buil
 | GIFs | Giphy API (server-proxied) |
 | Auth | JWT (httpOnly cookies) + bcrypt |
 | Frontend Hosting | Vercel |
-| Backend Hosting | Northflank |
+| Backend Hosting | Render |
 
 Every service in this stack runs on a free tier with no credit card required — built for a solo dev on a zero budget, launched in time for Navratri.
 
