@@ -77,15 +77,16 @@ All routes are prefixed with `/api`. Routes marked 🔒 require authentication (
 
 Auth uses an httpOnly JWT cookie (7-day expiry) — no token handling needed on the client beyond `withCredentials: true` / `credentials: 'include'`.
 
-## Deploying to Northflank
+## Deploying to Render
 
 1. Push this repo to GitHub (already done if you're reading this from the deployed monorepo).
-2. On Northflank: create a new project, then **Add New → Service → connect the repo**.
+2. On Render: **New + → Web Service**, connect this repo.
 3. Since this is a monorepo, set **Root Directory** to `garbathrills-backend`.
-4. Build command: `npm install && npm run build`
+4. Build command: `npm install --include=dev && npm run build`
 5. Start command: `npm start`
-6. Add all `.env` variables under the service's Environment settings.
-7. Once deployed, update `FRONTEND_URL` to your live Vercel frontend URL so CORS and cookies work correctly.
+6. Add all `.env` variables under the service's Environment settings (Render auto-injects `PORT`, so don't set it manually).
+7. In MongoDB Atlas, go to Network Access and allow access from `0.0.0.0/0`, since Render's IPs aren't static.
+8. Once deployed, update `FRONTEND_URL` to your live Vercel frontend URL so CORS and cookies work correctly.
 
 ## Setting up Supabase Storage (photo storage, free, no credit card required)
 
