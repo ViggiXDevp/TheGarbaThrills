@@ -143,7 +143,7 @@ TheGarbaThrills/
 ## 🚀 How It's Deployed
 
 - **Frontend** → Vercel, root directory `garbathrills-frontend`
-- **Backend** → Northflank, root directory `garbathrills-backend`
+- **Backend** → Render, root directory `garbathrills-backend`
 - **Database** → MongoDB Atlas, Mumbai region
 - **Photos** → Supabase Storage bucket `GarbaThrills-Photos` (public, 2MB limit, images pre-resized to 1000×1000 before upload)
 
